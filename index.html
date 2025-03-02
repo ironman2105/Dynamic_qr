@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Updated Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h2>Live Updated Details</h2>
+    <p><strong>Name:</strong> <span id="name"></span></p>
+    <p><strong>Address:</strong> <span id="address"></span></p>
+    <p><strong>Email:</strong> <span id="email"></span></p>
+    <p><strong>Contact Number:</strong> <span id="contact"></span></p>
+
+    <script>
+        async function fetchData() {
+            const sheetID = "1cFt2ab4Q757yySBB0CqxjYLnXGdqp0_EzXzfnScFWXs"; 
+            const url = `https://docs.google.com/spreadsheets/d/1cFt2ab4Q757yySBB0CqxjYLnXGdqp0_EzXzfnScFWXs/gviz/tq?tqx=out:json`;
+
+            try {
+                let response = await fetch(url);
+                let text = await response.text();
+                
+                let jsonData = JSON.parse(text.substring(47, text.length - 2)); // Clean JSON format
+                let rows = jsonData.table.rows[0].c; // Get first row data
+
+                document.getElementById("name").innerText = rows[0].v;
+                document.getElementById("address").innerText = rows[1].v;
+                document.getElementById("email").innerText = rows[2].v;
+                document.getElementById("contact").innerText = rows[3].v;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        fetchData();
+    </script>
+
+</body>
+</html>
